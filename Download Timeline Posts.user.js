@@ -1,61 +1,121 @@
 // ==UserScript==
 // @name         Download Timeline Posts
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      1.0
 // @description  presses the save button from click and save on each post on a timeline
-// @author       You
+// @author       BlueRedBlueYellow
 // @match        https://twitter.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
 // @grant        none
 // ==/UserScript==
-const timer = ms => new Promise(res => setTimeout(res, ms))
+const scrollLength = 400;
+const scrollDelay = 50;
+const cssHeadStylesheet = `
+#save-images-bar {
+    color: black;
+    font-family: 'TwitterChirp';
+    font-size: 16px;
+}
+
+#image-amount-label {
+    margin: 8px;
+    padding: 4px;
+    color: white;
+}
+
+#image-amount-input {
+    width: 40px;
+    height: 30px;
+}
+
+#save-images-btn {
+    width: 50px;
+    height: 30px;
+    margin: 8px;
+    padding: 4px;
+
+    background-color: white;
+    font-weight: 700;
+    font-size: 14px;
+
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+#save-images-btn:hover {
+    background-color: lightgray;
+}
+`;
+
+const styleTag = document.createElement("style");
+styleTag.innerHTML = cssHeadStylesheet;
+const timer = ms => new Promise(res => setTimeout(res, ms));
+
+function waitForElement(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) return resolve(document.querySelector(selector));
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+
 async function searchForImages(imageAmount) {
-    var imagesClicked = 0;
+    let imagesClicked = 0;
+    let clickNSaveButtons = document.getElementsByClassName("ujs-btn-download ujs-not-downloaded");
     while (true) {
-        let clickNSaveButtons = document.getElementsByClassName("ujs-btn-download ujs-not-downloaded");
         console.log(clickNSaveButtons)
-        await timer(150);
-        window.scrollBy(0, 400);
+        await timer(scrollDelay);
+        window.scrollBy(0, scrollLength);
         for (let button of clickNSaveButtons) {
             if (imagesClicked > imageAmount) {
                 return true;
             } else if (button.className === "ujs-btn-download ujs-not-downloaded" || button.className === "ujs-btn-download ujs-not-downloaded ujs-video") {
                 button.click();
                 imagesClicked += 1;
-                console.log(imagesClicked);
-                await timer(150);
             };
         };
     };
 };
-setTimeout(() => {
-    const followersBar = document.getElementsByClassName("css-1dbjc4n r-13awgt0 r-18u37iz r-1w6e6rj")[0];
-    console.log(followersBar)
 
-    const getImagesBtn = document.createElement("button");
-    getImagesBtn.innerHTML = "save images";
-    getImagesBtn.className = "save-images";
-    getImagesBtn.style = "margin: 8px; padding: 4px;";
+async function main() {
+    const saveImagesBar = document.createElement("div");
+    saveImagesBar.id = "save-images-bar";
 
-    const imagesAmountInput = document.createElement("input");
-    imagesAmountInput.type = "number";
-    imagesAmountInput.style = "width: 70px;";
-    imagesAmountInput.className = "page-input";
+    const imageAmountInput = document.createElement("input");
+    imageAmountInput.id = "image-amount-input";
+    imageAmountInput.type = "number";
 
     const imageAmountLabel = document.createElement("label");
-    imageAmountLabel.innerText = "Image amount?:"
-    imageAmountLabel.style = "color: white; margin: 8px; padding: 4px; font-family: 'Arial';"
+    imageAmountLabel.id = "image-amount-label";
+    imageAmountLabel.innerText = "Image Amount:";
 
-    followersBar.appendChild(imageAmountLabel);
-    followersBar.appendChild(imagesAmountInput);
-    followersBar.appendChild(getImagesBtn);
-
+    const getImagesBtn = document.createElement("button");
+    getImagesBtn.id = "save-images-btn";
+    getImagesBtn.innerHTML = "Save";
     getImagesBtn.onclick = async function() {
-        const imageAmount = imagesAmountInput.value;
-        var imagesClicked = 0;
-        console.log("scrolled");
-        await timer(1000);
-        await searchForImages(imageAmount);
+        let imageAmount = parseInt(imageAmountInput.value);
+        imageAmount = imageAmount ? imageAmount : 0;
+        searchForImages(imageAmount);
     };
-}, 2000)
 
+    const navBar = await waitForElement(".css-1dbjc4n.r-1pi2tsx.r-1wtj0ep.r-1rnoaur.r-1e081e0.r-o96wvk .css-1dbjc4n.r-1habvwh");
+    navBar.appendChild(saveImagesBar);
+    saveImagesBar.appendChild(imageAmountLabel);
+    saveImagesBar.appendChild(imageAmountInput);
+    saveImagesBar.appendChild(getImagesBtn);
+
+    document.head.insertAdjacentElement('beforeend', styleTag);
+};
+
+main();

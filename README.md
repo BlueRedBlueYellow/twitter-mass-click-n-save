@@ -9,7 +9,7 @@ The original script keeps track of download history, this extenstion utilizes th
 ## Installation
 
 1. Install a userscript manager, such as [Tampermonkey](https://www.tampermonkey.net) or [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
-2. Download it here from greasyfork, and confirm.
+2. Click from [here](https://github.com/BlueRedBlueYellow/twitter-mass-click-n-save/raw/main/Twitter%20Mass%20Click%20N%20Save.user.js) to install and confirm.
 
 ## Usage
 

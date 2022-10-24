@@ -3,8 +3,9 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  presses the save button from click and save on each post on a timeline
-// @author       BlueRedBlueYellow
 // @match        https://twitter.com/*
+// @homepageURL  https://github.com/BlueRedBlueYellow/twitter-mass-click-n-save/
+// @supportURL   https://github.com/BlueRedBlueYellow/twitter-mass-click-n-save/issues
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
 // @grant        none
 // ==/UserScript==

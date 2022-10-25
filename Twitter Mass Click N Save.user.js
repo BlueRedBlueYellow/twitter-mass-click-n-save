@@ -1,34 +1,35 @@
 // ==UserScript==
 // @name         Download Timeline Posts
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.0.1
 // @description  presses the save button from click and save on each post on a timeline
-// @author       BlueRedBlueYellow
 // @match        https://twitter.com/*
+// @homepageURL  https://github.com/BlueRedBlueYellow/twitter-mass-click-n-save/
+// @supportURL   https://github.com/BlueRedBlueYellow/twitter-mass-click-n-save/issues
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
 // @grant        none
 // ==/UserScript==
 const scrollLength = 400;
 const scrollDelay = 50;
 const cssHeadStylesheet = `
-#save-images-bar {
+#save-media-bar {
     color: black;
     font-family: 'TwitterChirp';
     font-size: 16px;
 }
 
-#image-amount-label {
+#media-amount-label {
     margin: 8px;
     padding: 4px;
     color: white;
 }
 
-#image-amount-input {
+#media-amount-input {
     width: 40px;
     height: 30px;
 }
 
-#save-images-btn {
+#save-media-btn {
     width: 50px;
     height: 30px;
     margin: 8px;
@@ -43,7 +44,7 @@ const cssHeadStylesheet = `
     cursor: pointer;
 }
 
-#save-images-btn:hover {
+#save-media-btn:hover {
     background-color: lightgray;
 }
 `;
@@ -70,50 +71,50 @@ function waitForElement(selector) {
     });
 }
 
-async function searchForImages(imageAmount) {
-    let imagesClicked = 0;
+async function searchForMedia(mediaAmount) {
+    let mediaClicked = 0;
     let clickNSaveButtons = document.getElementsByClassName("ujs-btn-download ujs-not-downloaded");
     while (true) {
         console.log(clickNSaveButtons)
         await timer(scrollDelay);
         window.scrollBy(0, scrollLength);
         for (let button of clickNSaveButtons) {
-            if (imagesClicked > imageAmount) {
+            if (mediaClicked > mediaAmount) {
                 return true;
             } else if (button.className === "ujs-btn-download ujs-not-downloaded" || button.className === "ujs-btn-download ujs-not-downloaded ujs-video") {
                 button.click();
-                imagesClicked += 1;
+                mediaClicked += 1;
             };
         };
     };
 };
 
 async function main() {
-    const saveImagesBar = document.createElement("div");
-    saveImagesBar.id = "save-images-bar";
+    const saveMediaBar = document.createElement("div");
+    saveMediaBar.id = "save-media-bar";
 
-    const imageAmountInput = document.createElement("input");
-    imageAmountInput.id = "image-amount-input";
-    imageAmountInput.type = "number";
+    const mediaAmountInput = document.createElement("input");
+    mediaAmountInput.id = "media-amount-input";
+    mediaAmountInput.type = "number";
 
-    const imageAmountLabel = document.createElement("label");
-    imageAmountLabel.id = "image-amount-label";
-    imageAmountLabel.innerText = "Image Amount:";
+    const mediaAmountLabel = document.createElement("label");
+    mediaAmountLabel.id = "media-amount-label";
+    mediaAmountLabel.innerText = "Media Amount:";
 
-    const getImagesBtn = document.createElement("button");
-    getImagesBtn.id = "save-images-btn";
-    getImagesBtn.innerHTML = "Save";
-    getImagesBtn.onclick = async function() {
-        let imageAmount = parseInt(imageAmountInput.value);
-        imageAmount = imageAmount ? imageAmount : 0;
-        searchForImages(imageAmount);
+    const getMediaBtn = document.createElement("button");
+    getMediaBtn.id = "save-media-btn";
+    getMediaBtn.innerHTML = "Save";
+    getMediaBtn.onclick = async function() {
+        let mediaAmount = parseInt(mediaAmountInput.value);
+        mediaAmount = mediaAmount ? mediaAmount : 0;
+        searchForMedia(mediaAmount);
     };
 
     const navBar = await waitForElement(".css-1dbjc4n.r-1pi2tsx.r-1wtj0ep.r-1rnoaur.r-1e081e0.r-o96wvk .css-1dbjc4n.r-1habvwh");
-    navBar.appendChild(saveImagesBar);
-    saveImagesBar.appendChild(imageAmountLabel);
-    saveImagesBar.appendChild(imageAmountInput);
-    saveImagesBar.appendChild(getImagesBtn);
+    navBar.appendChild(saveMediaBar);
+    saveMediaBar.appendChild(mediaAmountLabel);
+    saveMediaBar.appendChild(mediaAmountInput);
+    saveMediaBar.appendChild(getMediaBtn);
 
     document.head.insertAdjacentElement('beforeend', styleTag);
 };

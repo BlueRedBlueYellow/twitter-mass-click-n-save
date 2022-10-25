@@ -9,7 +9,8 @@ The original script keeps track of download history, this extension utilizes tha
 ## Installation
 
 1. Install a userscript manager, such as [Tampermonkey](https://www.tampermonkey.net) or [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/).
-2. Click from [here](https://github.com/BlueRedBlueYellow/twitter-mass-click-n-save/raw/main/Twitter%20Mass%20Click%20N%20Save.user.js) to install and confirm.
+2. Install the [original script](https://github.com/AlttiRi/twitter-click-and-save) listed above.
+3. Click from [here](https://github.com/BlueRedBlueYellow/twitter-mass-click-n-save/raw/main/Twitter%20Mass%20Click%20N%20Save.user.js) to install and confirm.
 
 ## Usage
 

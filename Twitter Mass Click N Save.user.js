@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Download Timeline Posts
 // @namespace    http://tampermonkey.net/
-// @version      1.0.1
+// @version      2.0.0
 // @description  presses the save button from click and save on each post on a timeline
 // @match        https://twitter.com/*
 // @homepageURL  https://github.com/BlueRedBlueYellow/twitter-mass-click-n-save/
@@ -110,7 +110,7 @@ async function main() {
         searchForMedia(mediaAmount);
     };
 
-    const navBar = await waitForElement(".css-1dbjc4n.r-1pi2tsx.r-1wtj0ep.r-1rnoaur.r-1e081e0.r-o96wvk .css-1dbjc4n.r-1habvwh");
+    const navBar = await waitForElement(".r-1rnoaur > div:nth-child(1)");
     navBar.appendChild(saveMediaBar);
     saveMediaBar.appendChild(mediaAmountLabel);
     saveMediaBar.appendChild(mediaAmountInput);

@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Download Timeline Posts
 // @namespace    http://tampermonkey.net/
-// @version      2.0.0
+// @version      2.0.1
 // @description  presses the save button from click and save on each post on a timeline
-// @match        https://twitter.com/*
+// @match        https://x.com/*
 // @homepageURL  https://github.com/BlueRedBlueYellow/twitter-mass-click-n-save/
 // @supportURL   https://github.com/BlueRedBlueYellow/twitter-mass-click-n-save/issues
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=twitter.com
